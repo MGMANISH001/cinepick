@@ -1,0 +1,61 @@
+/* ============================================================
+   CINEPICK — global styles
+   Tailwind directives first (build scans index.html + src/**),
+   then the custom polish (Ken Burns, scrollbars, drawer). */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   CINEPICK — custom styles beyond Tailwind utilities
+   (ported from the original src/app/globals.css "Hotstar polish")
+   ============================================================ */
+
+/* Ken Burns slow zoom for the hero backdrop image. Keeps the blurred
+   backdrop subtly alive without distracting from foreground content. */
+@keyframes kenburns {
+  0% {
+    transform: scale(1.1) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.18) translate3d(-1.5%, -1%, 0);
+  }
+  100% {
+    transform: scale(1.1) translate3d(0, 0, 0);
+  }
+}
+.kenburns-layer {
+  animation: kenburns 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Hide scrollbars on horizontal content rows (cleaner Hotstar look). */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mobile sidebar drawer slide-in. */
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.animate-slide-in-left {
+  animation: slide-in-left 0.3s ease-out;
+}
+
+/* Babel compiles the JSX at page load — hide the app root until React
+   mounts so there is no flash of unstyled/empty content. */
+#root:not(:has(*)) {
+  min-height: 100vh;
+  background: #000;
+}
