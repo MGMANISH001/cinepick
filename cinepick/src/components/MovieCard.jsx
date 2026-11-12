@@ -24,8 +24,14 @@ function MovieCard({
   const cardRef = useRef(null);
   const posterRef = useRef(null);
 
+  // On touch screens a tap fires a "sticky" mouseenter; skip the hover lift
+  // there so cards don't jump or stay raised after tapping.
+  function canHover() {
+    return window.matchMedia?.("(hover: hover)").matches ?? true;
+  }
+
   function handleEnter() {
-    if (!cardRef.current) return;
+    if (!cardRef.current || !canHover()) return;
     anime({ targets: cardRef.current, translateY: -6, duration: 280, easing: "easeOutCubic" });
     if (posterRef.current) {
       anime({ targets: posterRef.current, scale: 1.06, duration: 400, easing: "easeOutCubic" });
@@ -56,7 +62,7 @@ function MovieCard({
   return (
     <div
       ref={cardRef}
-      data-card
+      data-card=""
       data-row-item={variant === "compact" ? "" : undefined}
       role="button"
       tabIndex={0}
@@ -72,7 +78,7 @@ function MovieCard({
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400",
         // Compact variant sized to fit ~5 cards per row on desktop.
         // (w-36=144 mobile → 2 cards · w-44=176 sm → 3 · w-52=208 md → 3-4 · w-56=224 lg → 5)
-        variant === "compact" && "w-36 shrink-0 sm:w-44 md:w-52 lg:w-56",
+        variant === "compact" && "w-36 shrink-0 snap-start sm:w-44 md:w-52 lg:w-56",
         className
       )}
       aria-label={`${movie.title}, ${movie.year}. ${movie.genres.join(", ")}. Rated ${movie.rating} out of 10. Open details.`}
@@ -90,7 +96,7 @@ function MovieCard({
 
         {/* Match-percent chip (used in recommendations) */}
         {typeof matchPercent === "number" && (
-          <div className="absolute right-2 top-2 rounded-full bg-gradient-to-r from-rose-500 to-fuchsia-500 px-2 py-0.5 text-[11px] font-bold text-white shadow">
+          <div className="absolute right-2 top-2 rounded-full bg-gradient-to-r from-rose-500 to-fuchsia-500 px-2 py-0.5 text-[10px] font-bold text-white shadow sm:text-[11px]">
             {matchPercent}% match
           </div>
         )}
@@ -101,7 +107,7 @@ function MovieCard({
           aria-label={liked ? `Remove ${movie.title} from watchlist` : `Add ${movie.title} to watchlist`}
           aria-pressed={liked}
           className={cn(
-            "absolute bottom-2 right-2 z-10 grid h-9 w-9 place-items-center rounded-full border border-white/10 backdrop-blur transition-colors",
+            "absolute bottom-2 right-2 z-10 grid h-10 w-10 place-items-center sm:h-9 sm:w-9 rounded-full border border-white/10 backdrop-blur transition-colors",
             liked
               ? "bg-rose-500 text-white"
               : "bg-black/60 text-white/70 hover:bg-black/80 hover:text-white"
@@ -111,10 +117,10 @@ function MovieCard({
         </button>
       </div>
 
-      <div className="flex flex-1 flex-col gap-1.5 p-4">
+      <div className="flex flex-1 flex-col gap-1.5 p-3 sm:p-4">
         <div className="flex items-baseline justify-between gap-2">
-          <h3 className="line-clamp-1 text-sm font-bold text-white">{movie.title}</h3>
-          <span className="text-[11px] text-zinc-400">{movie.year}</span>
+          <h3 className="line-clamp-1 min-w-0 text-sm font-bold text-white">{movie.title}</h3>
+          <span className="shrink-0 text-[11px] text-zinc-400">{movie.year}</span>
         </div>
         <p className="line-clamp-1 text-[11px] uppercase tracking-wide text-zinc-400">
           {movie.genres.slice(0, 3).join(" · ")}

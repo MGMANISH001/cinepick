@@ -91,7 +91,7 @@ function TopTenRow({ movies, onOpen, liked, onToggleLike }) {
 
         <div
           ref={scrollRef}
-          className="no-scrollbar flex gap-2 overflow-x-auto px-4 pb-3 sm:px-8"
+          className="no-scrollbar flex snap-x snap-proximity scroll-pl-4 gap-2 overflow-x-auto overscroll-x-contain px-4 pb-3 sm:scroll-pl-8 sm:px-8"
         >
           {movies.slice(0, 10).map((m, i) => (
             <TopTenCard
@@ -123,25 +123,23 @@ function TopTenRow({ movies, onOpen, liked, onToggleLike }) {
 function TopTenCard({ movie, rank, liked, onOpen, onToggleLike }) {
   return (
     <div
-      data-row-item
-      className="relative flex shrink-0 items-end"
-      style={{ width: "calc(100vw - 4rem)", maxWidth: "20rem" }}
+      data-row-item=""
+      className="relative flex shrink-0 snap-start items-end"
     >
       {/* Giant rank number */}
       <span
         aria-hidden="true"
-        className="pointer-events-none select-none font-black leading-none text-transparent"
+        className="pointer-events-none select-none text-[6.5rem] font-black leading-none text-transparent sm:text-[9rem]"
         style={{
-          fontSize: "9rem",
           WebkitTextStroke: "2px rgba(255,255,255,0.45)",
-          marginRight: "-1.5rem",
+          marginRight: "-1.25rem",
         }}
       >
         {rank}
       </span>
 
       {/* Poster card */}
-      <div className="relative w-32 shrink-0 overflow-hidden rounded-lg border border-white/10 bg-zinc-900 shadow-lg sm:w-36">
+      <div className="relative w-28 shrink-0 overflow-hidden rounded-lg border border-white/10 bg-zinc-900 shadow-lg min-[400px]:w-32 sm:w-36">
         <button
           onClick={() => onOpen(movie)}
           className="group/poster block aspect-[2/3] w-full"
@@ -158,7 +156,7 @@ function TopTenCard({ movie, rank, liked, onOpen, onToggleLike }) {
           aria-label={liked ? `Remove ${movie.title} from watchlist` : `Add ${movie.title} to watchlist`}
           aria-pressed={liked}
           className={cn(
-            "absolute bottom-1.5 right-1.5 grid h-7 w-7 place-items-center rounded-full border border-white/10 backdrop-blur transition-colors",
+            "absolute bottom-1.5 right-1.5 grid h-8 w-8 place-items-center rounded-full border border-white/10 backdrop-blur transition-colors",
             liked ? "bg-rose-500 text-white" : "bg-black/60 text-white/70 hover:bg-black/80"
           )}
         >

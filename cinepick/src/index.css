@@ -53,9 +53,57 @@
   animation: slide-in-left 0.3s ease-out;
 }
 
-/* Babel compiles the JSX at page load — hide the app root until React
-   mounts so there is no flash of unstyled/empty content. */
+/* Keep the page black until React mounts so there is no flash. */
 #root:not(:has(*)) {
   min-height: 100vh;
   background: #000;
+}
+
+/* ============================================================
+   Responsive / mobile polish
+   ============================================================ */
+
+/* No grey tap flash on touch devices; stop iOS from inflating text in
+   landscape; never allow sideways page scroll (clip, not hidden, so
+   position: sticky keeps working). */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  overflow-x: clip;
+}
+
+/* Visible keyboard focus everywhere, without showing on mouse clicks. */
+:focus-visible {
+  outline: 2px solid #fb7185;
+  outline-offset: 2px;
+}
+
+/* Bottom-sheet slide-up used by the movie modal on phones. */
+@keyframes sheet-up {
+  0% {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.animate-sheet-up {
+  animation: sheet-up 0.28s ease-out;
+}
+
+/* Respect the OS "reduce motion" setting. */
+@media (prefers-reduced-motion: reduce) {
+  .kenburns-layer,
+  .animate-slide-in-left,
+  .animate-sheet-up {
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
 }

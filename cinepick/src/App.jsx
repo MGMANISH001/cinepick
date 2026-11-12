@@ -144,7 +144,7 @@ function App() {
   const showShowLess = browseExpanded && browseTotalMatches > BROWSE_PREVIEW_COUNT;
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-[100dvh] bg-black text-white">
       {/* === SIDEBAR === */}
       <Sidebar
         onJumpHome={jumpToHome}
@@ -170,7 +170,7 @@ function App() {
           onJumpToQuiz={jumpToQuiz}
         />
 
-        <main className="relative z-10 -mt-12 flex flex-col gap-12 pb-24 sm:gap-16 sm:pb-32">
+        <main className="relative z-10 -mt-8 flex flex-col gap-10 pb-20 sm:-mt-12 sm:gap-16 sm:pb-32">
           {/* === CONTINUE WATCHING === */}
           {watchlistMovies.length > 0 && (
             <ContentRow
@@ -312,7 +312,7 @@ function App() {
               title="The whole library"
               subtitle="Filter by genre to narrow it down. Use the search in the sidebar to jump to a specific title."
             />
-            <div className="mb-8 flex flex-col gap-4">
+            <div className="mb-6 flex flex-col gap-4 sm:mb-8">
               <GenreFilter
                 selected={browseGenres}
                 onToggle={toggleGenre}
@@ -331,7 +331,7 @@ function App() {
                 onToggleLike={watchlist.toggle}
               />
             ) : (
-              <div className="rounded-3xl border border-white/10 bg-zinc-900/50 p-12 text-center text-zinc-400">
+              <div className="rounded-3xl border border-white/10 bg-zinc-900/50 p-8 text-center text-zinc-400 sm:p-12">
                 <p className="text-sm">
                   No films match your filters. Try a different genre combination.
                 </p>
@@ -342,7 +342,7 @@ function App() {
               <div className="mt-8 flex justify-center">
                 <button
                   onClick={() => setBrowseExpanded(true)}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:border-white/30 hover:bg-white/10"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:border-white/30 hover:bg-white/10"
                 >
                   See All {browseTotalMatches} Films
                   <Icon name="ChevronDown" className="h-4 w-4" />
@@ -353,7 +353,7 @@ function App() {
               <div className="mt-8 flex justify-center">
                 <button
                   onClick={() => setBrowseExpanded(false)}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:border-white/30 hover:bg-white/10"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:border-white/30 hover:bg-white/10"
                 >
                   Show Less
                   <Icon name="ChevronUp" className="h-4 w-4" />
@@ -385,16 +385,16 @@ function App() {
         </main>
 
         {/* === FOOTER === */}
-        <footer className="mt-auto border-t border-white/10 bg-zinc-950">
-          <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-zinc-500 sm:flex-row sm:px-8">
-            <div className="flex items-center gap-2">
+        <footer className="mt-auto border-t border-white/10 bg-zinc-950 pb-[env(safe-area-inset-bottom)]">
+          <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 text-center text-sm text-zinc-500 sm:flex-row sm:px-8 sm:text-left">
+            <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:justify-start">
               <div className="grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-rose-500 to-fuchsia-500">
                 <Icon name="Film" className="h-4 w-4 text-white" />
               </div>
               <span className="font-black tracking-tight text-white">CINEPICK</span>
               <span className="text-zinc-600">— a taste-tuned film discovery experience</span>
             </div>
-            <p className="text-xs">
+            <p className="max-w-md text-xs sm:max-w-sm sm:text-right">
               Built with plain HTML, Tailwind CSS, React, and anime.js — no build
               step. Profile, watchlist, and recommendations are stored locally in
               your browser only.
@@ -420,13 +420,13 @@ function App() {
 
 function SectionHeading({ icon, eyebrow, title, subtitle }) {
   return (
-    <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div className="mb-6 flex flex-col gap-3 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.25em] text-rose-200">
           {icon}
           {eyebrow}
         </div>
-        <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
+        <h2 className="break-words text-2xl font-black tracking-tight text-white min-[400px]:text-3xl sm:text-4xl">
           {title}
         </h2>
         <p className="mt-2 max-w-xl text-sm text-zinc-400">{subtitle}</p>
@@ -444,7 +444,7 @@ function BrowseGrid({ movies, onOpen, liked, onToggleLike }) {
   return (
     <div
       ref={ref}
-      className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+      className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
     >
       {movies.map((m) => (
         <MovieCard

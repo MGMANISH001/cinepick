@@ -68,19 +68,52 @@ function ParticleBackground() {
       raf = requestAnimationFrame(draw);
     }
 
+    const reduceMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    function start() {
+      if (reduceMotion || raf) return;
+      raf = requestAnimationFrame(draw);
+    }
+    function stop() {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    }
+
     resize();
     seed();
-    draw();
+    if (reduceMotion) {
+      // One static frame instead of a running loop.
+      draw();
+      stop();
+    } else {
+      draw();
+    }
 
+    // Mobile browsers fire "resize" whenever the address bar shows/hides
+    // while scrolling. Reseed only when the width really changed; a
+    // height-only change just resizes the canvas so the dots don't jump.
+    let lastWidth = width;
     const onResize = () => {
+      const w = canvas.parentElement?.clientWidth ?? window.innerWidth;
+      const h = canvas.parentElement?.clientHeight ?? window.innerHeight;
+      if (w === lastWidth && h === height) return;
+      const widthChanged = w !== lastWidth;
+      lastWidth = w;
       resize();
-      seed();
+      if (widthChanged) seed();
     };
     window.addEventListener("resize", onResize);
 
+    // Don't burn battery animating in a background tab.
+    const onVisibility = () => (document.hidden ? stop() : start());
+    document.addEventListener("visibilitychange", onVisibility);
+
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
       window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
 

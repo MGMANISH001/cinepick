@@ -1,6 +1,6 @@
 // (Vite ESM port — imports injected by scripts/port_to_vite.py)
 
-import { useState, useMemo } from "react";
+import { useState,} from "react";
 import { Icon } from "./Icon";
 import { ALL_GENRES, ALL_MOODS, MOVIES } from "../data/movies";
 import { useStaggerEntrance } from "../hooks/useStaggerEntrance";
@@ -17,7 +17,13 @@ function MoodQuiz({ onComplete, onReset, initial }) {
   const [step, setStep] = useState("mood");
   const [moods, setMoods] = useState(initial.moods);
   const [genres, setGenres] = useState(initial.genres);
-
+  // Hook only re-runs when `step` changes; passing the full opts object
+// every render would create a new reference and trigger exhaustive-deps.
+// The `selector` is a stable string literal, so [step] is the only
+// meaningful dependency. Suppress both ESLint and JetBrains' own
+// exhaustive-deps inspector (which does not respect eslint-disable).
+// noinspection ReactHookExhaustiveDeps
+// eslint-disable-next-line react-hooks/exhaustive-deps
   const moodRef = useStaggerEntrance({ selector: "[data-chip]", deps: [step] });
 
   function toggle(list, set, value) {
@@ -36,25 +42,26 @@ function MoodQuiz({ onComplete, onReset, initial }) {
     else onReset();
   }
 
-  const canProceed = useMemo(() => {
-    if (step === "mood") return moods.length > 0;
-    if (step === "genre") return genres.length > 0 || moods.length > 0;
-    return true;
-  }, [step, moods, genres]);
+  const canProceed =
+      step === "mood"
+          ? moods.length > 0
+          : step === "genre"
+              ? genres.length > 0 || moods.length > 0
+              : true;
 
   const progress = step === "mood" ? 33 : step === "genre" ? 66 : 100;
 
   return (
     <section
       id="quiz"
-      className="relative mx-auto w-full max-w-5xl scroll-mt-20 px-4 py-16 sm:px-6 sm:py-24"
+      className="relative mx-auto w-full max-w-5xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-24"
     >
       <div className="mb-10 text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-rose-500/30 bg-rose-500/10 px-3 py-1 text-[11px] uppercase tracking-[0.25em] text-rose-200">
           <Icon name="Sparkles" className="h-3.5 w-3.5" />
           Taste Engine
         </span>
-        <h2 className="mt-4 text-3xl font-black tracking-tight text-white sm:text-5xl">
+        <h2 className="mt-4 text-[1.75rem] font-black leading-tight tracking-tight text-white min-[400px]:text-3xl sm:text-5xl">
           Tell us how you{" "}
           <span className="bg-gradient-to-r from-rose-400 to-fuchsia-400 bg-clip-text text-transparent">
             feel
@@ -85,7 +92,7 @@ function MoodQuiz({ onComplete, onReset, initial }) {
 
       <div
         ref={moodRef}
-        className="rounded-3xl border border-white/10 bg-zinc-900/50 p-6 backdrop-blur sm:p-10"
+        className="rounded-3xl border border-white/10 bg-zinc-900/50 p-4 backdrop-blur min-[400px]:p-6 sm:p-10"
       >
         {step === "mood" && (
           <div>
@@ -95,7 +102,7 @@ function MoodQuiz({ onComplete, onReset, initial }) {
             <p className="mb-6 text-sm text-zinc-400">
               Pick one or more — these describe how you want the film to feel.
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               {ALL_MOODS.map((m) => (
                 <Chip
                   key={m}
@@ -117,14 +124,13 @@ function MoodQuiz({ onComplete, onReset, initial }) {
               Optional — even one is enough, but the more you pick, the sharper
               your results.
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               {ALL_GENRES.map((g) => (
                 <Chip
                   key={g}
                   active={genres.includes(g)}
                   onClick={() => toggle(genres, setGenres, g)}
                   label={g}
-                  variant="genre"
                 />
               ))}
             </div>
@@ -143,12 +149,12 @@ function MoodQuiz({ onComplete, onReset, initial }) {
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               {moods.length > 0 && (
-                <div className="rounded-xl border border-white/10 bg-black/30 px-4 py-2 text-xs text-zinc-300">
+                <div className="max-w-full rounded-xl border border-white/10 bg-black/30 px-4 py-2 text-left text-xs text-zinc-300">
                   <span className="text-zinc-500">Moods:</span> {moods.join(", ")}
                 </div>
               )}
               {genres.length > 0 && (
-                <div className="rounded-xl border border-white/10 bg-black/30 px-4 py-2 text-xs text-zinc-300">
+                <div className="max-w-full rounded-xl border border-white/10 bg-black/30 px-4 py-2 text-left text-xs text-zinc-300">
                   <span className="text-zinc-500">Genres:</span> {genres.join(", ")}
                 </div>
               )}
@@ -157,10 +163,10 @@ function MoodQuiz({ onComplete, onReset, initial }) {
         )}
 
         {/* Footer nav */}
-        <div className="mt-8 flex items-center justify-between">
+        <div className="mt-8 flex items-center justify-between gap-3">
           <button
             onClick={goBack}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-zinc-300 transition-colors hover:border-white/30 hover:text-white"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-zinc-300 transition-colors hover:border-white/30 hover:text-white"
           >
             <Icon name="RotateCcw" className="h-3.5 w-3.5" />
             {step === "mood" ? "Cancel" : "Back"}
@@ -169,7 +175,7 @@ function MoodQuiz({ onComplete, onReset, initial }) {
             onClick={goNext}
             disabled={!canProceed}
             className={cn(
-              "inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold transition-all",
+              "inline-flex min-h-11 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all sm:px-6",
               canProceed
                 ? "bg-gradient-to-r from-rose-500 to-fuchsia-500 text-white shadow-lg shadow-rose-500/30 hover:scale-[1.03]"
                 : "cursor-not-allowed bg-white/5 text-zinc-500"
@@ -189,14 +195,14 @@ function MoodQuiz({ onComplete, onReset, initial }) {
   );
 }
 
-function Chip({ active, onClick, label, variant = "mood" }) {
+function Chip({ active, onClick, label }) {
   return (
     <button
-      data-chip
+      data-chip=""
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "rounded-full border px-4 py-2 text-sm font-medium transition-all",
+        "min-h-11 rounded-full border px-4 py-2 text-sm font-medium transition-all sm:min-h-0",
         !active &&
           "border-white/10 bg-white/5 text-zinc-300 hover:border-white/25 hover:text-white",
         active &&

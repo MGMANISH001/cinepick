@@ -1,20 +1,88 @@
 // ============================================================
 // CINEPICK — <Icon /> component (lucide-react)
 //
-// Renders the same lucide icons the original project used, now via
-// the lucide-react npm package (tree-shaken in the build). The
-// `icons` export maps PascalCase names ("Play", "Star", "Film", ...)
-// to ready-made React components, so the existing
-// <Icon name="..." /> usage keeps working unchanged.
+// Only the icons the app actually uses are imported here, so the
+// production bundle stays small (importing the whole `icons` map
+// would ship every lucide icon to every phone).
+//
+// To use a new icon: import it below and add it to ICONS.
 //
 // Usage:  <Icon name="Play" className="h-4 w-4" />
 //         <Icon name="Star" className="h-3 w-3 fill-amber-300" />
 // ============================================================
 
-import { icons } from "lucide-react";
+import {
+  Bookmark,
+  BookmarkCheck,
+  Calendar,
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  Clock,
+  Compass,
+  Drama,
+  Eye,
+  Film,
+  Flame,
+  Heart,
+  Home,
+  Info,
+  LayoutGrid,
+  Menu,
+  Pencil,
+  Play,
+  Plus,
+  RotateCcw,
+  Rocket,
+  Search,
+  Sparkles,
+  Star,
+  Trash2,
+  TrendingUp,
+  Trophy,
+  UserCheck,
+  X,
+} from "lucide-react";
+
+const ICONS = {
+  Bookmark,
+  BookmarkCheck,
+  Calendar,
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  Clock,
+  Compass,
+  Drama,
+  Eye,
+  Film,
+  Flame,
+  Heart,
+  Home,
+  Info,
+  LayoutGrid,
+  Menu,
+  Pencil,
+  Play,
+  Plus,
+  RotateCcw,
+  Rocket,
+  Search,
+  Sparkles,
+  Star,
+  Trash2,
+  TrendingUp,
+  Trophy,
+  UserCheck,
+  X,
+};
 
 function Icon({ name, className = "", size, fill, strokeWidth, style, ...rest }) {
-  const Cmp = icons[name];
+  const Cmp = ICONS[name];
   if (!Cmp) return null;
 
   return (

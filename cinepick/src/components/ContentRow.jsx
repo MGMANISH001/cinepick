@@ -67,7 +67,7 @@ function ContentRow({ title, subtitle, badge, children, className }) {
   return (
     <section className={cn("relative", className)}>
       <div className="mb-3 flex items-end justify-between gap-4 px-4 sm:px-8">
-        <div>
+        <div className="min-w-0">
           <div className="flex items-center gap-2">
             {badge}
             <h2 className="text-lg font-black tracking-tight text-white sm:text-2xl">
@@ -100,7 +100,7 @@ function ContentRow({ title, subtitle, badge, children, className }) {
         {/* Scroll viewport */}
         <div
           ref={scrollRef}
-          className="no-scrollbar flex gap-3 overflow-x-auto px-4 pb-3 sm:px-8"
+          className="no-scrollbar flex snap-x snap-proximity scroll-pl-4 gap-3 overflow-x-auto overscroll-x-contain px-4 pb-3 sm:scroll-pl-8 sm:px-8"
         >
           {children}
         </div>

@@ -9,11 +9,15 @@ import { cn } from "../lib/utils";
 
 function GenreFilter({ selected, onToggle, onClear }) {
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div
+      className="no-scrollbar -mx-4 flex snap-x items-center gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0"
+      role="group"
+      aria-label="Filter by genre"
+    >
       <button
         onClick={onClear}
         className={cn(
-          "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+          "min-h-9 shrink-0 snap-start whitespace-nowrap rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
           selected.length === 0
             ? "border-rose-400 bg-rose-500/20 text-rose-200"
             : "border-white/10 bg-white/5 text-zinc-400 hover:border-white/25 hover:text-white"
@@ -29,7 +33,7 @@ function GenreFilter({ selected, onToggle, onClear }) {
             onClick={() => onToggle(g)}
             aria-pressed={active}
             className={cn(
-              "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+              "min-h-9 shrink-0 snap-start whitespace-nowrap rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
               active
                 ? "border-transparent bg-gradient-to-r from-rose-500 to-fuchsia-500 text-white"
                 : "border-white/10 bg-white/5 text-zinc-400 hover:border-white/25 hover:text-white"

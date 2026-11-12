@@ -28,7 +28,7 @@ function ProfileGate({ onSelect }) {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black text-white">
+    <main className="relative min-h-[100dvh] overflow-hidden bg-black text-white">
       <ParticleBackground />
       {/* Aurora glow */}
       <div
@@ -40,22 +40,22 @@ function ProfileGate({ onSelect }) {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-16">
-        <div className="mb-10 text-center">
+      <div className="relative z-10 flex min-h-[100dvh] flex-col items-center justify-center px-4 py-12 sm:py-16">
+        <div className="mb-8 text-center sm:mb-10">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.25em] text-rose-200 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-rose-500" aria-hidden="true" />
             CINEPICK
           </div>
-          <h1 className="text-4xl font-black tracking-tight sm:text-6xl">
+          <h1 className="text-3xl font-black tracking-tight min-[400px]:text-4xl sm:text-6xl">
             Who's watching?
           </h1>
-          <p className="mt-3 max-w-md text-sm text-zinc-400">
+          <p className="mx-auto mt-3 max-w-md text-sm text-zinc-400">
             Pick a profile to dive in. Each profile keeps its own watchlist and
             recommendations.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 md:gap-6">
+        <div className="flex max-w-4xl flex-wrap justify-center gap-x-5 gap-y-6 md:gap-x-6">
           {profiles.map((p) => (
             <ProfileTile
               key={p.id}
@@ -68,7 +68,7 @@ function ProfileGate({ onSelect }) {
 
           <button
             onClick={() => setAdding(true)}
-            className="group flex flex-col items-center gap-3"
+            className="group flex w-24 flex-col items-center gap-3 sm:w-32"
             aria-label="Add a new profile"
           >
             <div className="grid h-24 w-24 place-items-center rounded-2xl border border-dashed border-white/20 bg-white/5 text-white/40 transition-all group-hover:border-rose-400/60 group-hover:bg-rose-500/10 group-hover:text-rose-300 sm:h-32 sm:w-32">
@@ -80,7 +80,7 @@ function ProfileGate({ onSelect }) {
           </button>
         </div>
 
-        <div className="mt-12">
+        <div className="mt-10 sm:mt-12">
           <button
             onClick={() => setEditing((e) => !e)}
             className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2 text-sm font-medium text-zinc-300 transition-colors hover:border-white/40 hover:text-white"
@@ -104,7 +104,7 @@ function ProfileGate({ onSelect }) {
 function ProfileTile({ profile, onSelect, editing, onRemove }) {
   const initials = profileInitials(profile.name);
   return (
-    <div className="group relative flex flex-col items-center gap-3">
+    <div className="group relative flex w-24 flex-col items-center gap-3 sm:w-32">
       <button
         onClick={onSelect}
         aria-label={`Sign in as ${profile.name}`}
@@ -124,7 +124,7 @@ function ProfileTile({ profile, onSelect, editing, onRemove }) {
           </span>
         </span>
       </button>
-      <span className="text-sm text-zinc-300 transition-colors group-hover:text-white">
+      <span className="max-w-full truncate text-sm text-zinc-300 transition-colors group-hover:text-white">
         {profile.name}
       </span>
 
@@ -132,7 +132,7 @@ function ProfileTile({ profile, onSelect, editing, onRemove }) {
         <button
           onClick={onRemove}
           aria-label={`Remove ${profile.name} profile`}
-          className="absolute -right-2 -top-2 grid h-8 w-8 place-items-center rounded-full bg-rose-500 text-white shadow-lg shadow-rose-500/40 transition-transform hover:scale-110"
+          className="absolute -right-2 -top-2 grid h-9 w-9 place-items-center rounded-full bg-rose-500 text-white shadow-lg shadow-rose-500/40 transition-transform hover:scale-110"
         >
           <Icon name="Trash2" className="h-4 w-4" />
         </button>
@@ -156,7 +156,7 @@ function AddProfileModal({ onClose, onCreate }) {
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md rounded-3xl border border-white/10 bg-zinc-950 p-6 shadow-2xl"
+        className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-3xl border border-white/10 bg-zinc-950 p-5 shadow-2xl sm:p-6"
       >
         <div className="mb-5 flex items-start justify-between">
           <h2 className="text-xl font-black tracking-tight text-white">
@@ -166,7 +166,7 @@ function AddProfileModal({ onClose, onCreate }) {
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="grid h-8 w-8 place-items-center rounded-full text-zinc-400 hover:bg-white/10 hover:text-white"
+            className="grid h-10 w-10 place-items-center rounded-full text-zinc-400 hover:bg-white/10 hover:text-white sm:h-8 sm:w-8"
           >
             <Icon name="X" className="h-4 w-4" />
           </button>
@@ -196,7 +196,7 @@ function AddProfileModal({ onClose, onCreate }) {
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. Riley"
           maxLength={20}
-          className="mb-5 w-full rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 text-sm text-white placeholder:text-zinc-500 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/30"
+          className="mb-5 w-full rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 text-base text-white sm:text-sm placeholder:text-zinc-500 focus:border-rose-400/50 focus:outline-none focus:ring-2 focus:ring-rose-400/30"
         />
 
         <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-zinc-400">
@@ -211,7 +211,7 @@ function AddProfileModal({ onClose, onCreate }) {
               aria-label={`Color ${c}`}
               aria-pressed={color === c}
               className={cn(
-                "grid h-9 w-9 place-items-center rounded-full border-2 transition-all",
+                "grid h-10 w-10 place-items-center rounded-full border-2 transition-all sm:h-9 sm:w-9",
                 color === c ? "border-white" : "border-transparent"
               )}
               style={{ background: c }}

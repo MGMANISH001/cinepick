@@ -14,12 +14,21 @@ import anime from "animejs";
 // ============================================================
 
 const AUTO_ADVANCE_MS = 4000;
+const SWIPE_MIN_PX = 50;
+
+function prefersReducedMotion() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+  );
+}
 
 function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const rootRef = useRef(null);
   const backdropRef = useRef(null);
+  const touchStart = useRef(null);
 
   const current = slides[index] ?? slides[0];
 
@@ -40,7 +49,7 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
 
   // Auto-advance unless paused or only one slide.
   useEffect(() => {
-    if (paused || slides.length <= 1) return;
+    if (paused || slides.length <= 1 || prefersReducedMotion()) return;
     const t = setTimeout(() => next(), AUTO_ADVANCE_MS);
     return () => clearTimeout(t);
   }, [index, paused, slides.length]);
@@ -75,6 +84,26 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
     });
   }, [index]);
 
+  // Swipe left/right on touch screens to change slide. Only a mostly
+  // horizontal gesture counts, so vertical page scrolling is untouched.
+  function onTouchStart(e) {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+    setPaused(true);
+  }
+  function onTouchEnd(e) {
+    const start = touchStart.current;
+    touchStart.current = null;
+    setPaused(false);
+    if (!start) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (Math.abs(dx) < SWIPE_MIN_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (dx < 0) next();
+    else prev();
+  }
+
   if (!current) return null;
 
   return (
@@ -85,6 +114,12 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      onTouchCancel={() => {
+        touchStart.current = null;
+        setPaused(false);
+      }}
     >
       {/* Blurred poster backdrop (darkened + Ken Burns slow zoom) */}
       <div ref={backdropRef} aria-hidden="true" className="absolute inset-0 overflow-hidden">
@@ -121,10 +156,10 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
       <ParticleBackground />
 
       {/* Hero content */}
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-8 px-4 pb-20 pt-10 sm:px-8 sm:pb-28 sm:pt-16 md:grid-cols-[1.4fr_1fr] md:items-center">
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-8 px-4 pb-16 pt-20 sm:px-8 sm:pb-28 sm:pt-16 md:grid-cols-[1.4fr_1fr] md:items-center">
         <div className="flex flex-col gap-5">
           <div
-            data-hero-block
+            data-hero-block=""
             className="inline-flex items-center gap-2 self-start rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.25em] text-rose-200 backdrop-blur"
           >
             <span className="relative flex h-1.5 w-1.5">
@@ -140,15 +175,17 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
               Extra-long titles (>32 chars) drop a size step to stay within
               the reserved block. */}
           <div
-            data-hero-block
-            className="flex h-[10.7rem] max-w-3xl flex-col justify-end sm:h-[12.85rem] md:h-[17.1rem]"
+            data-hero-block=""
+            className="flex h-[7.2rem] max-w-3xl flex-col justify-end sm:h-[12.85rem] md:h-[17.1rem]"
           >
             <h1
               className={cn(
-                "font-display uppercase !leading-[0.95] tracking-[0.01em] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.65)]",
+                "break-words font-display uppercase !leading-[0.95] tracking-[0.01em] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.65)]",
+                // Phone sizes are deliberately small so the longest single
+                // word ("Interstellar") fits a 320px screen without breaking.
                 current.title.length > 32
-                  ? "text-5xl sm:text-6xl md:text-7xl"
-                  : "text-6xl sm:text-7xl md:text-8xl"
+                  ? "text-3xl sm:text-6xl md:text-7xl"
+                  : "text-[2.5rem] sm:text-7xl md:text-8xl"
               )}
             >
               {current.title}
@@ -157,7 +194,7 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
 
           {/* Metadata row */}
           <div
-            data-hero-block
+            data-hero-block=""
             className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-zinc-200"
           >
             <span className="flex items-center gap-1.5 font-semibold text-amber-300">
@@ -180,7 +217,7 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
           </div>
 
           {/* Tagline + plot excerpt */}
-          <div data-hero-block className="max-w-2xl">
+          <div data-hero-block="" className="max-w-2xl">
             <p className="text-base font-medium italic text-zinc-200 sm:text-lg">
               &ldquo;{current.tagline}&rdquo;
             </p>
@@ -190,17 +227,17 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
           </div>
 
           {/* CTAs */}
-          <div data-hero-block className="flex flex-wrap items-center gap-3">
+          <div data-hero-block="" className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => onPlay(current)}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold text-black shadow-xl transition-transform hover:scale-[1.03] sm:text-base"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-black shadow-xl sm:px-7 transition-transform hover:scale-[1.03] sm:text-base"
             >
               <Icon name="Play" className="h-4 w-4 fill-black" />
               Play
             </button>
             <button
               onClick={() => onMoreInfo(current)}
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-3 text-sm font-bold text-white backdrop-blur transition-colors hover:bg-white/20 sm:text-base"
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-bold text-white backdrop-blur sm:px-7 transition-colors hover:bg-white/20 sm:text-base"
             >
               <Icon name="Info" className="h-4 w-4" />
               More Info
@@ -214,7 +251,7 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
           </div>
 
           {/* Dot indicators */}
-          <div data-hero-block className="mt-2 flex items-center gap-2">
+          <div data-hero-block="" className="mt-2 flex items-center gap-2">
             {slides.map((s, i) => (
               <button
                 key={s.id}
@@ -222,7 +259,7 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
                 aria-label={`Go to slide ${i + 1}: ${s.title}`}
                 aria-current={i === index}
                 className={cn(
-                  "h-1.5 rounded-full transition-all",
+                  "relative h-1.5 rounded-full transition-all after:absolute after:-inset-x-1 after:-inset-y-3 after:content-['']",
                   i === index ? "w-8 bg-rose-500" : "w-3 bg-white/30 hover:bg-white/50"
                 )}
               />
@@ -251,14 +288,14 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
       <button
         onClick={prev}
         aria-label="Previous featured film"
-        className="absolute left-1 top-1/2 z-20 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition-colors hover:bg-black/80 sm:left-4"
+        className="absolute left-1 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition-colors hover:bg-black/80 sm:left-4 sm:grid"
       >
         <Icon name="ChevronLeft" className="h-5 w-5" />
       </button>
       <button
         onClick={next}
         aria-label="Next featured film"
-        className="absolute right-1 top-1/2 z-20 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition-colors hover:bg-black/80 sm:right-4"
+        className="absolute right-1 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-black/50 text-white backdrop-blur transition-colors hover:bg-black/80 sm:right-4 sm:grid"
       >
         <Icon name="ChevronRight" className="h-5 w-5" />
       </button>

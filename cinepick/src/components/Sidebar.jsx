@@ -100,6 +100,21 @@ function Sidebar({
     });
   }, []);
 
+  // Mobile drawer: Escape closes it and the page behind it stops scrolling.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    function onKey(e) {
+      if (e.key === "Escape") setMobileOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
+
   // Focus the search input when it opens.
   useEffect(() => {
     if (searchOpen) {
@@ -135,13 +150,13 @@ function Sidebar({
         ref={navRef}
         className={cn(
           "flex h-full flex-col border-r border-white/10 bg-zinc-950/95 backdrop-blur-xl transition-[width] duration-300 ease-out",
-          expanded ? "w-64 shadow-2xl shadow-black/60" : "w-20"
+          expanded ? "w-64 max-w-[85vw] shadow-2xl shadow-black/60" : "w-20"
         )}
         aria-label="Main navigation"
         aria-expanded={expanded}
       >
         {/* Logo */}
-        <div data-sidebar-block className="flex items-center px-4 py-5">
+        <div data-sidebar-block="" className="flex items-center px-4 py-5">
           <span className="grid w-12 shrink-0 place-items-center">
             <span className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-rose-500 to-fuchsia-500 shadow-lg shadow-rose-500/30">
               <Icon name="Film" className="h-5 w-5 text-white" />
@@ -153,7 +168,7 @@ function Sidebar({
         </div>
 
         {/* Search */}
-        <div data-sidebar-block className="px-4 pb-3">
+        <div data-sidebar-block="" className="px-4 pb-3">
           {expanded && searchOpen ? (
             <div className="relative">
               <Icon
@@ -166,7 +181,7 @@ function Sidebar({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search titles…"
                 aria-label="Search movies by title"
-                className="w-full rounded-full border border-white/10 bg-zinc-900/80 py-2 pl-9 pr-9 text-sm text-white placeholder:text-zinc-500 focus:border-rose-400/40 focus:outline-none focus:ring-2 focus:ring-rose-400/30"
+                className="w-full rounded-full border border-white/10 bg-zinc-900/80 py-2 pl-9 pr-9 text-base text-white md:text-sm placeholder:text-zinc-500 focus:border-rose-400/40 focus:outline-none focus:ring-2 focus:ring-rose-400/30"
               />
               {searchQuery && (
                 <button
@@ -263,10 +278,10 @@ function Sidebar({
           {items.map((item) => (
             <button
               key={item.id}
-              data-nav-item
+              data-nav-item=""
               onClick={() => handleNavSelect(item)}
               className={cn(
-                "group flex w-full items-center rounded-lg py-2.5 text-left text-sm font-medium text-zinc-300 transition-all hover:bg-white/5 hover:text-white",
+                "group flex w-full items-center rounded-lg py-3 text-left text-sm font-medium md:py-2.5 text-zinc-300 transition-all hover:bg-white/5 hover:text-white",
                 expanded ? "pr-2 hover:translate-x-1" : "pr-0"
               )}
             >
@@ -340,7 +355,11 @@ function Sidebar({
       <button
         onClick={() => setMobileOpen(true)}
         aria-label="Open menu"
-        className="fixed left-3 top-3 z-50 grid h-10 w-10 place-items-center rounded-full bg-zinc-950/80 text-white backdrop-blur md:hidden"
+        className="fixed left-3 top-3 z-40 grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-zinc-950/80 text-white shadow-lg shadow-black/40 backdrop-blur md:hidden"
+        style={{
+          marginTop: "env(safe-area-inset-top)",
+          marginLeft: "env(safe-area-inset-left)",
+        }}
       >
         <Icon name="Menu" className="h-5 w-5" />
       </button>
@@ -353,8 +372,15 @@ function Sidebar({
             onClick={() => setMobileOpen(false)}
             aria-hidden="true"
           />
-          <div className="animate-slide-in-left absolute inset-y-0 left-0">
+          <div className="animate-slide-in-left absolute left-0 top-0 h-[100dvh] max-w-[85vw]">
             {renderRail({ expanded: true })}
+            <button
+              onClick={() => setMobileOpen(false)}
+              aria-label="Close menu"
+              className="absolute right-2 top-3 grid h-10 w-10 place-items-center rounded-full text-zinc-400 hover:bg-white/10 hover:text-white"
+            >
+              <Icon name="X" className="h-5 w-5" />
+            </button>
           </div>
         </div>
       )}

@@ -57,7 +57,7 @@ function MovieModal({ movie, liked, onToggleLike, similar, onSelectSimilar, onOp
 
   return (
     <div
-      className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto bg-black/70 backdrop-blur-sm sm:items-center sm:p-4"
       onClick={() => onOpenChange(false)}
       role="presentation"
     >
@@ -66,7 +66,7 @@ function MovieModal({ movie, liked, onToggleLike, similar, onSelectSimilar, onOp
         role="dialog"
         aria-modal="true"
         aria-label={movie.title}
-        className="max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-3xl border border-white/10 bg-zinc-950/95 text-white shadow-2xl backdrop-blur-xl"
+        className="animate-sheet-up max-h-[92dvh] w-full max-w-4xl overflow-y-auto overscroll-contain rounded-t-3xl border border-white/10 bg-zinc-950/95 text-white shadow-2xl backdrop-blur-xl sm:animate-none sm:rounded-3xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Visually hidden title for screen readers */}
@@ -74,18 +74,21 @@ function MovieModal({ movie, liked, onToggleLike, similar, onSelectSimilar, onOp
           {movie.title}. {movie.tagline} Rated {movie.rating} out of 10.
         </h2>
 
-        <div className="relative grid gap-0 md:grid-cols-[40%_60%]">
-          {/* Close button */}
+        {/* Close button — wrapper is sticky so the button stays on screen
+            while a tall sheet scrolls (h-0 so it takes no layout space). */}
+        <div className="pointer-events-none sticky top-0 z-20 h-0">
           <button
             onClick={() => onOpenChange(false)}
             aria-label="Close details"
-            className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-black/60 text-white/80 backdrop-blur transition-colors hover:bg-black/80 hover:text-white"
+            className="pointer-events-auto absolute right-3 top-3 grid h-11 w-11 place-items-center rounded-full bg-black/70 text-white/90 backdrop-blur transition-colors hover:bg-black/90 hover:text-white sm:h-9 sm:w-9"
           >
-            <Icon name="X" className="h-4 w-4" />
+            <Icon name="X" className="h-5 w-5 sm:h-4 sm:w-4" />
           </button>
+        </div>
 
+        <div className="relative grid gap-0 md:grid-cols-[40%_60%]">
           {/* Poster column */}
-          <div data-modal-block className="relative aspect-[2/3] md:aspect-auto md:h-full">
+          <div data-modal-block="" className="relative h-64 min-[420px]:h-80 md:h-full md:min-h-[28rem]">
             <MoviePoster key={movie.id} movie={movie} />
             <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 text-xs font-semibold text-amber-300 backdrop-blur">
               <Icon name="Star" className="h-3.5 w-3.5 fill-amber-300" />
@@ -94,19 +97,19 @@ function MovieModal({ movie, liked, onToggleLike, similar, onSelectSimilar, onOp
           </div>
 
           {/* Details column */}
-          <div className="flex flex-col gap-5 p-5 sm:p-7">
-            <div data-modal-block>
+          <div className="flex min-w-0 flex-col gap-5 p-5 sm:p-7">
+            <div data-modal-block="">
               <p className="text-xs uppercase tracking-[0.25em] text-rose-400">
                 {movie.year} · {movie.director}
               </p>
-              <h3 className="mt-1 text-3xl font-black leading-tight tracking-tight sm:text-4xl">
+              <h3 className="mt-1 break-words text-2xl font-black leading-tight tracking-tight min-[420px]:text-3xl sm:text-4xl">
                 {movie.title}
               </h3>
               <p className="mt-2 text-sm italic text-zinc-400">{movie.tagline}</p>
             </div>
 
             {/* Meta chips */}
-            <div data-modal-block className="flex flex-wrap gap-2">
+            <div data-modal-block="" className="flex flex-wrap gap-2">
               {movie.genres.map((g) => (
                 <span
                   key={g}
@@ -125,7 +128,7 @@ function MovieModal({ movie, liked, onToggleLike, similar, onSelectSimilar, onOp
               ))}
             </div>
 
-            <div data-modal-block className="flex items-center gap-4 text-xs text-zinc-400">
+            <div data-modal-block="" className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-400">
               <span className="flex items-center gap-1.5">
                 <Icon name="Clock" className="h-3.5 w-3.5" /> {movie.duration} min
               </span>
@@ -134,26 +137,26 @@ function MovieModal({ movie, liked, onToggleLike, similar, onSelectSimilar, onOp
               </span>
             </div>
 
-            <div data-modal-block>
+            <div data-modal-block="">
               <h4 className="mb-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">
                 Plot
               </h4>
               <p className="text-sm leading-relaxed text-zinc-200">{movie.plot}</p>
             </div>
 
-            <div data-modal-block>
+            <div data-modal-block="">
               <h4 className="mb-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">
                 Cast
               </h4>
               <p className="text-sm text-zinc-200">{movie.cast.join(", ")}</p>
             </div>
 
-            <div data-modal-block>
+            <div data-modal-block="">
               <button
                 onClick={() => onToggleLike(movie.id)}
                 aria-pressed={liked}
                 className={cn(
-                  "inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors",
+                  "inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-colors sm:w-auto sm:py-2.5",
                   liked
                     ? "bg-rose-500 text-white hover:bg-rose-600"
                     : "bg-white/10 text-white hover:bg-white/20"
@@ -168,7 +171,10 @@ function MovieModal({ movie, liked, onToggleLike, similar, onSelectSimilar, onOp
 
         {/* Similar movies */}
         {similar.length > 0 && (
-          <div className="border-t border-white/10 bg-black/40 p-5 sm:p-7" data-modal-block>
+          <div
+            className="border-t border-white/10 bg-black/40 p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:p-7"
+            data-modal-block=""
+          >
             <h4 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-zinc-300">
               <Icon name="Sparkles" className="h-4 w-4 text-rose-400" />
               Because you like {movie.title}
