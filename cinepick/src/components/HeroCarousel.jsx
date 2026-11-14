@@ -166,7 +166,7 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rose-400 opacity-75" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-rose-500" />
             </span>
-            Featured · Slide {index + 1} of {slides.length}
+            Featured
           </div>
 
           {/* Title. FIXED-height block, bottom-aligned text: the metadata

@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Icon } from "./Icon";
 import { ProfileBadge } from "./ProfileBadge";
-import { searchTitlesByPrefix } from "../lib/recommender";
 import { cn } from "../lib/utils";
 import anime from "animejs";
 
@@ -36,36 +35,29 @@ function Reveal({ expanded, children, className = "" }) {
 }
 
 function Sidebar({
-  onJumpHome,
-  onJumpTrending,
-  onJumpTop10,
-  onJumpQuiz,
-  onJumpBrowse,
-  onJumpWatchlist,
-  onJumpGenreRow,
-  onPickFromSearch,
-  onOpenProfileGate,
-  hasWatchlist,
-}) {
+                   onJumpHome,
+                   onJumpTrending,
+                   onJumpQuiz,
+                   onJumpBrowse,
+                   onJumpWatchlist,
+                   onOpenSearch,
+                   onCloseSearch,
+                   onOpenProfileGate,
+                   hasWatchlist,
+                 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [hoverExpanded, setHoverExpanded] = useState(false); // desktop hover state
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchOpen, setSearchOpen] = useState(false);
-  const searchRef = useRef(null);
+  const [hoverExpanded, setHoverExpanded] = useState(false);
   const navRef = useRef(null);
 
   const items = [
     { id: "home", label: "Home", icon: "Home", onSelect: onJumpHome },
-    { id: "trending", label: "Trending Now", icon: "Flame", onSelect: onJumpTrending },
-    { id: "top10", label: "Top 10", icon: "Trophy", onSelect: onJumpTop10 },
-    { id: "foryou", label: "For You", icon: "Sparkles", onSelect: onJumpQuiz },
-    { id: "scifi", label: "Sci-Fi", icon: "Rocket", onSelect: () => onJumpGenreRow("Sci-Fi") },
-    { id: "drama", label: "Drama", icon: "Drama", onSelect: () => onJumpGenreRow("Drama") },
-    { id: "thriller", label: "Thriller", icon: "Eye", onSelect: () => onJumpGenreRow("Thriller") },
-    { id: "browse", label: "Browse All", icon: "LayoutGrid", onSelect: onJumpBrowse },
+    { id: "search", label: "Search", icon: "Search", onSelect: onOpenSearch },
+    { id: "movies", label: "Movies", icon: "Film", onSelect: onJumpBrowse },
+    { id: "entertainment", label: "Entertainment", icon: "Flame", onSelect: onJumpTrending },
+    { id: "anime", label: "Anime", icon: "Sparkles", onSelect: onJumpQuiz },
     ...(hasWatchlist
-      ? [{ id: "mylist", label: "My List", icon: "Bookmark", onSelect: onJumpWatchlist }]
-      : []),
+        ? [{ id: "mylist", label: "My List", icon: "Bookmark", onSelect: onJumpWatchlist }]
+        : []),
   ];
 
   // Staggered fade-in for sidebar nav items (re-runs when My List appears).
@@ -115,32 +107,13 @@ function Sidebar({
     };
   }, [mobileOpen]);
 
-  // Focus the search input when it opens.
-  useEffect(() => {
-    if (searchOpen) {
-      const t = setTimeout(() => searchRef.current?.focus(), 50);
-      return () => clearTimeout(t);
-    }
-  }, [searchOpen]);
-
-  const suggestions = searchQuery.trim() ? searchTitlesByPrefix(searchQuery, 6) : [];
-
-  function handlePick(movie) {
-    onPickFromSearch(movie);
-    setSearchQuery("");
-    setSearchOpen(false);
-    setMobileOpen(false);
-  }
 
   function handleNavSelect(item) {
     item.onSelect();
     setMobileOpen(false);
+    onCloseSearch?.();      // ← ADD THIS — closes the search panel
   }
 
-  function openSearch() {
-    setSearchOpen(true);
-    setHoverExpanded(true); // touch devices: tapping the icon also opens the rail
-  }
 
   // The rail is rendered twice (desktop fixed + mobile drawer) with an
   // `expanded` flag driving every reveal/width class.
@@ -167,106 +140,6 @@ function Sidebar({
           </Reveal>
         </div>
 
-        {/* Search */}
-        <div data-sidebar-block="" className="px-4 pb-3">
-          {expanded && searchOpen ? (
-            <div className="relative">
-              <Icon
-                name="Search"
-                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500"
-              />
-              <input
-                ref={searchRef}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search titles…"
-                aria-label="Search movies by title"
-                className="w-full rounded-full border border-white/10 bg-zinc-900/80 py-2 pl-9 pr-9 text-base text-white md:text-sm placeholder:text-zinc-500 focus:border-rose-400/40 focus:outline-none focus:ring-2 focus:ring-rose-400/30"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => {
-                    setSearchQuery("");
-                    setSearchOpen(false);
-                  }}
-                  aria-label="Close search"
-                  className="absolute right-2 top-1/2 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full text-zinc-400 hover:bg-white/10 hover:text-white"
-                >
-                  <Icon name="X" className="h-3.5 w-3.5" />
-                </button>
-              )}
-
-              {/* Suggestions dropdown — anchored to the sidebar */}
-              {searchQuery.trim() && (
-                <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/95 shadow-2xl backdrop-blur-xl">
-                  {suggestions.length > 0 ? (
-                    <ul className="max-h-[24rem] overflow-y-auto">
-                      {suggestions.map((m) => (
-                        <li key={m.id}>
-                          <button
-                            onClick={() => handlePick(m)}
-                            className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-white/5"
-                          >
-                            <div className="h-14 w-10 shrink-0 overflow-hidden rounded">
-                              {m.posterUrl ? (
-                                <img
-                                  src={m.posterUrl}
-                                  alt=""
-                                  className="h-full w-full object-cover"
-                                />
-                              ) : (
-                                <div
-                                  className="h-full w-full"
-                                  style={{
-                                    background: `linear-gradient(135deg, ${m.posterGradient[0]}, ${m.posterGradient[1]})`,
-                                  }}
-                                />
-                              )}
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <p className="truncate text-sm font-medium text-white">
-                                {m.title}
-                              </p>
-                              <p className="truncate text-xs text-zinc-400">
-                                {m.year} · {m.genres.slice(0, 2).join(", ")}
-                              </p>
-                            </div>
-                            <span className="flex shrink-0 items-center gap-1 text-xs font-semibold text-amber-300">
-                              <Icon name="Star" className="h-3 w-3 fill-amber-300" />
-                              {m.rating.toFixed(1)}
-                            </span>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <div className="px-4 py-6 text-center text-sm text-zinc-400">
-                      No titles match &ldquo;{searchQuery}&rdquo;.
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ) : (
-            <button
-              onClick={openSearch}
-              aria-label="Search titles"
-              className={cn(
-                "flex w-full items-center rounded-full border transition-colors",
-                expanded
-                  ? "border-white/10 bg-zinc-900/60 py-2.5 pr-3 hover:border-white/25"
-                  : "border-transparent py-2.5 hover:bg-white/5"
-              )}
-            >
-              <span className="grid w-12 shrink-0 place-items-center text-zinc-400 transition-colors hover:text-white">
-                <Icon name="Search" className="h-4 w-4" />
-              </span>
-              <Reveal expanded={expanded}>
-                <span className="text-sm text-zinc-400">Search titles…</span>
-              </Reveal>
-            </button>
-          )}
-        </div>
 
         {/* Nav items (scrollable) */}
         <nav className="flex-1 overflow-y-auto px-4 pb-4">

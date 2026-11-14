@@ -10,8 +10,9 @@ import { MovieCard } from "./components/MovieCard";
 import { MovieModal } from "./components/MovieModal";
 import { ProfileGate } from "./components/ProfileGate";
 import { Sidebar } from "./components/Sidebar";
+import { SearchPanel } from "./components/SearchPanel";
 import { TopTenRow } from "./components/TopTenRow";
-import { ALL_GENRES, MOVIES, getMovieById } from "./data/movies";
+import { MOVIES, getMovieById } from "./data/movies";
 import { useStaggerEntrance } from "./hooks/useStaggerEntrance";
 import { getRecommendations, getSimilar, getTrending } from "./lib/recommender";
 import { useProfile, useWatchlist } from "./store/store";
@@ -32,6 +33,7 @@ function App() {
   const [openMovie, setOpenMovie] = useState(null);
   const [profileGateOpen, setProfileGateOpen] = useState(false);
   const [browseExpanded, setBrowseExpanded] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const heroSlides = useMemo(
     () => [...MOVIES].sort((a, b) => b.rating - a.rating).slice(0, 7),
@@ -81,7 +83,7 @@ function App() {
   );
 
   const genreRows = useMemo(() => {
-    return ALL_GENRES.slice(0, 6).map((g) => ({
+    return ["Sci-Fi", "Drama", "Thriller", "Action", "Crime", "Adventure", "Animation"].map((g) => ({
       genre: g,
       movies: MOVIES.filter((m) => m.genres.includes(g)),
     }));
@@ -147,16 +149,17 @@ function App() {
     <div className="min-h-[100dvh] bg-black text-white">
       {/* === SIDEBAR === */}
       <Sidebar
-        onJumpHome={jumpToHome}
-        onJumpTrending={jumpToTrending}
-        onJumpTop10={jumpToTop10}
-        onJumpQuiz={jumpToQuiz}
-        onJumpBrowse={jumpToBrowse}
-        onJumpWatchlist={jumpToWatchlist}
-        onJumpGenreRow={jumpToGenreRow}
-        onPickFromSearch={(m) => setOpenMovie(m)}
-        onOpenProfileGate={() => setProfileGateOpen(true)}
-        hasWatchlist={watchlistMovies.length > 0}
+          onJumpHome={jumpToHome}
+          onJumpTrending={jumpToTrending}
+          onJumpTop10={jumpToTop10}
+          onJumpQuiz={jumpToQuiz}
+          onJumpBrowse={jumpToBrowse}
+          onJumpWatchlist={jumpToWatchlist}
+          onJumpGenreRow={jumpToGenreRow}
+          onOpenSearch={() => setSearchOpen(true)}
+          onCloseSearch={() => setSearchOpen(false)}    // ← ADD THIS
+          onOpenProfileGate={() => setProfileGateOpen(true)}
+          hasWatchlist={watchlistMovies.length > 0}
       />
 
       {/* === MAIN CONTENT (padded to clear the COLLAPSED rail on md+ —
@@ -405,12 +408,21 @@ function App() {
 
       {/* === MODAL === */}
       <MovieModal
-        movie={openMovie}
-        liked={openMovie ? watchlist.isLiked(openMovie.id) : false}
-        onToggleLike={watchlist.toggle}
-        similar={similarForOpen}
-        onSelectSimilar={(m) => setOpenMovie(m)}
-        onOpenChange={(open) => !open && setOpenMovie(null)}
+          movie={openMovie}
+          liked={openMovie ? watchlist.isLiked(openMovie.id) : false}
+          onToggleLike={watchlist.toggle}
+          similar={similarForOpen}
+          onSelectSimilar={(m) => setOpenMovie(m)}
+          onOpenChange={(open) => !open && setOpenMovie(null)}
+      />
+
+      {/* SEARCH PANEL */}
+      <SearchPanel
+          open={searchOpen}
+          onClose={() => setSearchOpen(false)}
+          onPickMovie={(m) => setOpenMovie(m)}
+          liked={watchlist.isLiked}
+          onToggleLike={watchlist.toggle}
       />
     </div>
   );
