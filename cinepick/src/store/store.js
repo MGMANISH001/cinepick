@@ -22,7 +22,6 @@ const DEFAULT_PROFILES = [
   { id: "p1", name: "Alex", color: "#e11d48" },
   { id: "p2", name: "Sam", color: "#7c3aed" },
   { id: "p3", name: "Jordan", color: "#0ea5e9" },
-  { id: "p4", name: "Kids", color: "#16a34a" },
 ];
 
 // Avatar color palette for the "Add profile" picker.

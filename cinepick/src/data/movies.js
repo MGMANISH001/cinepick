@@ -1,12 +1,7 @@
-// ============================================================
-// CINEPICK — movie dataset (50 curated films)
-// Plain JavaScript — no TypeScript, no build step required.
-// Each movie feeds the similarity scorer in recommender.js:
-//   genres/moods/cast/director drive "Because you liked X",
-//   the mood quiz, and the For You recommendations.
-// ============================================================
+// Rich curated movie dataset for the recommendation engine.
+// Each movie carries metadata used by the similarity scorer in /src/lib/recommender.ts.
 
-const ALL_GENRES = [
+export const ALL_GENRES = [
   "Sci-Fi",
   "Drama",
   "Thriller",
@@ -23,7 +18,7 @@ const ALL_GENRES = [
   "Music",
 ];
 
-const ALL_MOODS = [
+export const ALL_MOODS = [
   "Mind-bending",
   "Heartwarming",
   "Thrilling",
@@ -38,9 +33,8 @@ const ALL_MOODS = [
   "Romantic",
 ];
 
-const MOVIES = [
+export const MOVIES = [
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/90a6305ae71f.jpg",
     id: "inception",
     title: "Inception",
     year: 2010,
@@ -52,10 +46,10 @@ const MOVIES = [
     rating: 8.8,
     duration: 148,
     tagline: "Your mind is the scene of the crime.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9da7c68fd9b3.jpg",
     posterGradient: ["#1e3a8a", "#0f172a"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4217e7dc2156.jpg",
     id: "interstellar",
     title: "Interstellar",
     year: 2014,
@@ -67,10 +61,10 @@ const MOVIES = [
     rating: 8.7,
     duration: 169,
     tagline: "Mankind was born on Earth. It was never meant to die here.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c6ea23132f25.jpg",
     posterGradient: ["#7c2d12", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f63c17996b9f.jpg",
     id: "dark-knight",
     title: "The Dark Knight",
     year: 2008,
@@ -82,10 +76,10 @@ const MOVIES = [
     rating: 9.0,
     duration: 152,
     tagline: "Why so serious?",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f63c17996b9f.jpg",
     posterGradient: ["#1e293b", "#000000"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9eaf4ad19143.png",
     id: "pulp-fiction",
     title: "Pulp Fiction",
     year: 1994,
@@ -97,10 +91,10 @@ const MOVIES = [
     rating: 8.9,
     duration: 154,
     tagline: "You won't know the facts until you've seen the fiction.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/65dfc74698ff.jpg",
     posterGradient: ["#b45309", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9924fb0c392b.jpg",
     id: "matrix",
     title: "The Matrix",
     year: 1999,
@@ -112,10 +106,10 @@ const MOVIES = [
     rating: 8.7,
     duration: 136,
     tagline: "Welcome to the real world.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cdcab656ddf1.jpg",
     posterGradient: ["#166534", "#0a0a0a"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b4d1f50067c1.jpg",
     id: "fight-club",
     title: "Fight Club",
     year: 1999,
@@ -127,10 +121,10 @@ const MOVIES = [
     rating: 8.8,
     duration: 139,
     tagline: "Mischief. Mayhem. Soap.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b4d1f50067c1.jpg",
     posterGradient: ["#9f1239", "#0c0a09"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4d245c4f792f.jpg",
     id: "forrest-gump",
     title: "Forrest Gump",
     year: 1994,
@@ -142,10 +136,10 @@ const MOVIES = [
     rating: 8.8,
     duration: 142,
     tagline: "Life is like a box of chocolates.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4d245c4f792f.jpg",
     posterGradient: ["#15803d", "#3f6212"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b055227a1f9d.jpg",
     id: "shawshank",
     title: "The Shawshank Redemption",
     year: 1994,
@@ -157,10 +151,10 @@ const MOVIES = [
     rating: 9.3,
     duration: 142,
     tagline: "Fear can hold you prisoner. Hope can set you free.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/503afd663b47.jpg",
     posterGradient: ["#7c2d12", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f4c95fd2f6d8.jpg",
     id: "godfather",
     title: "The Godfather",
     year: 1972,
@@ -172,10 +166,10 @@ const MOVIES = [
     rating: 9.2,
     duration: 175,
     tagline: "I'm gonna make him an offer he can't refuse.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/975ce8206a96.jpg",
     posterGradient: ["#451a03", "#0c0a09"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9e0c5af39e34.jpg",
     id: "goodfellas",
     title: "Goodfellas",
     year: 1990,
@@ -187,10 +181,10 @@ const MOVIES = [
     rating: 8.7,
     duration: 146,
     tagline: "As far back as I can remember, I always wanted to be a gangster.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f365e1c8db99.jpg",
     posterGradient: ["#7f1d1d", "#0a0a0a"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f11cf2f79379.jpg",
     id: "parasite",
     title: "Parasite",
     year: 2019,
@@ -202,10 +196,10 @@ const MOVIES = [
     rating: 8.5,
     duration: 132,
     tagline: "Act like you own the place.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5160608b67b8.jpg",
     posterGradient: ["#166534", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4b99800c86d2.jpg",
     id: "whiplash",
     title: "Whiplash",
     year: 2014,
@@ -217,10 +211,10 @@ const MOVIES = [
     rating: 8.5,
     duration: 106,
     tagline: "The road to greatness can take you to the edge.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/af0133c7e093.jpg",
     posterGradient: ["#7c2d12", "#0c0a09"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/077b603b5792.jpg",
     id: "la-la-land",
     title: "La La Land",
     year: 2016,
@@ -232,10 +226,10 @@ const MOVIES = [
     rating: 8.0,
     duration: 128,
     tagline: "Here's to the ones who dream.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7f7a4e295ddf.jpg",
     posterGradient: ["#be123c", "#7c2d12"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/888bb3696fcd.jpg",
     id: "spirited-away",
     title: "Spirited Away",
     year: 2001,
@@ -247,10 +241,10 @@ const MOVIES = [
     rating: 8.6,
     duration: 125,
     tagline: "The tunnel led Chihiro to a mysterious town.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/888bb3696fcd.jpg",
     posterGradient: ["#0369a1", "#1e3a8a"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f97eac29c32a.jpg",
     id: "your-name",
     title: "Your Name",
     year: 2016,
@@ -262,10 +256,10 @@ const MOVIES = [
     rating: 8.4,
     duration: 106,
     tagline: "From the creators of the acclaimed anime.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f97eac29c32a.jpg",
     posterGradient: ["#1d4ed8", "#9333ea"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e2624ac592a8.jpg",
     id: "spider-verse",
     title: "Spider-Man: Into the Spider-Verse",
     year: 2018,
@@ -277,10 +271,10 @@ const MOVIES = [
     rating: 8.4,
     duration: 117,
     tagline: "More than one wears the mask.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e2624ac592a8.jpg",
     posterGradient: ["#9333ea", "#db2777"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1526098d3158.jpg",
     id: "the-batman",
     title: "The Batman",
     year: 2022,
@@ -292,10 +286,10 @@ const MOVIES = [
     rating: 7.8,
     duration: 176,
     tagline: "Unmask the truth.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1526098d3158.jpg",
     posterGradient: ["#1c1917", "#0c0a09"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0b6e7b629292.jpg",
     id: "joker",
     title: "Joker",
     year: 2019,
@@ -307,10 +301,10 @@ const MOVIES = [
     rating: 8.4,
     duration: 122,
     tagline: "Put on a happy face.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/aa1589db06ac.jpg",
     posterGradient: ["#a16207", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/51d5f49f605c.jpg",
     id: "django",
     title: "Django Unchained",
     year: 2012,
@@ -322,10 +316,10 @@ const MOVIES = [
     rating: 8.5,
     duration: 165,
     tagline: "Life, liberty and the pursuit of vengeance.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/67764eb8b89b.jpg",
     posterGradient: ["#7f1d1d", "#451a03"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1c7a1b8dbe7e.jpg",
     id: "inglourious",
     title: "Inglourious Basterds",
     year: 2009,
@@ -337,10 +331,10 @@ const MOVIES = [
     rating: 8.4,
     duration: 153,
     tagline: "Once upon a time in Nazi occupied France.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/08d23c18d5b5.jpg",
     posterGradient: ["#854d0e", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2e49b1390f41.jpg",
     id: "arrival",
     title: "Arrival",
     year: 2016,
@@ -352,10 +346,10 @@ const MOVIES = [
     rating: 7.9,
     duration: 116,
     tagline: "Why are they here?",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2fbe3c6054c1.webp",
     posterGradient: ["#1e3a8a", "#0c4a6e"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a587e54a0b6b.jpg",
     id: "dune-part-two",
     title: "Dune: Part Two",
     year: 2024,
@@ -367,10 +361,10 @@ const MOVIES = [
     rating: 8.5,
     duration: 166,
     tagline: "Long live the fighters.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a587e54a0b6b.jpg",
     posterGradient: ["#a16207", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f402265595f5.jpg",
     id: "blade-runner-2049",
     title: "Blade Runner 2049",
     year: 2017,
@@ -382,10 +376,10 @@ const MOVIES = [
     rating: 8.0,
     duration: 164,
     tagline: "The key to the future is finally unearthed.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/db763d4139db.jpg",
     posterGradient: ["#7c2d12", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cc385c50fb58.jpg",
     id: "mad-max-fury-road",
     title: "Mad Max: Fury Road",
     year: 2015,
@@ -397,10 +391,10 @@ const MOVIES = [
     rating: 8.1,
     duration: 120,
     tagline: "What a lovely day.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/be52b38faee7.jpg",
     posterGradient: ["#b45309", "#7f1d1d"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/18017364b679.jpg",
     id: "gladiator",
     title: "Gladiator",
     year: 2000,
@@ -412,10 +406,10 @@ const MOVIES = [
     rating: 8.5,
     duration: 155,
     tagline: "What we do in life echoes in eternity.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9c0fa865110e.jpg",
     posterGradient: ["#78350f", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/98ec5cbe8a78.jpg",
     id: "lotr-return-king",
     title: "The Lord of the Rings: The Return of the King",
     year: 2003,
@@ -427,10 +421,10 @@ const MOVIES = [
     rating: 9.0,
     duration: 201,
     tagline: "The eye of the enemy is moving.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5ff36b03befa.jpg",
     posterGradient: ["#854d0e", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4efc0f6ae1ff.jpg",
     id: "lotr-fellowship",
     title: "The Lord of the Rings: The Fellowship of the Ring",
     year: 2001,
@@ -442,10 +436,10 @@ const MOVIES = [
     rating: 8.9,
     duration: 178,
     tagline: "One ring to rule them all.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2c112fa7b976.jpg",
     posterGradient: ["#166534", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d2d4b1f87921.jpg",
     id: "amelie",
     title: "Amélie",
     year: 2001,
@@ -457,10 +451,10 @@ const MOVIES = [
     rating: 8.3,
     duration: 122,
     tagline: "She'll change your life.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/901965050130.jpg",
     posterGradient: ["#b91c1c", "#854d0e"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5aeb0ce81289.jpg",
     id: "eternal-sunshine",
     title: "Eternal Sunshine of the Spotless Mind",
     year: 2004,
@@ -472,10 +466,10 @@ const MOVIES = [
     rating: 8.3,
     duration: 108,
     tagline: "You can erase someone from your mind. But from your heart?",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/37773e4a9b8c.jpg",
     posterGradient: ["#0369a1", "#1e3a8a"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/47d94e62e19c.jpg",
     id: "the-truman-show",
     title: "The Truman Show",
     year: 1998,
@@ -487,10 +481,10 @@ const MOVIES = [
     rating: 8.2,
     duration: 103,
     tagline: "On the air. Unaware.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cd8d93ba30f8.jpg",
     posterGradient: ["#0e7490", "#0c4a6e"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d76e931cf631.jpg",
     id: "the-social-network",
     title: "The Social Network",
     year: 2010,
@@ -502,10 +496,10 @@ const MOVIES = [
     rating: 7.8,
     duration: 120,
     tagline: "You don't get to 500 million friends without making a few enemies.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f5d63f843631.jpg",
     posterGradient: ["#1e3a8a", "#0c0a09"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fa9237b7f2b9.jpg",
     id: "the-prestige",
     title: "The Prestige",
     year: 2006,
@@ -517,10 +511,10 @@ const MOVIES = [
     rating: 8.5,
     duration: 130,
     tagline: "Are you watching closely?",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/57f3618cbb45.jpg",
     posterGradient: ["#1e293b", "#0c0a09"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2f235adf37a7.jpg",
     id: "memento",
     title: "Memento",
     year: 2000,
@@ -532,10 +526,10 @@ const MOVIES = [
     rating: 8.4,
     duration: 117,
     tagline: "Some memories are best forgotten.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5c2e625ff968.jpg",
     posterGradient: ["#0c0a09", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/98f373af43bf.jpg",
     id: "the-silence",
     title: "The Silence of the Lambs",
     year: 1991,
@@ -547,10 +541,10 @@ const MOVIES = [
     rating: 8.6,
     duration: 118,
     tagline: "To enter the mind of a killer, she must face the madness of one.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7e6166ecd38e.jpg",
     posterGradient: ["#166534", "#0c0a09"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0688d7e87df6.jpg",
     id: "se7en",
     title: "Se7en",
     year: 1995,
@@ -562,10 +556,10 @@ const MOVIES = [
     rating: 8.6,
     duration: 127,
     tagline: "Seven deadly sins. Seven ways to die.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3128686d8fff.jpg",
     posterGradient: ["#7f1d1d", "#0a0a0a"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/010b0f8cf5a3.jpg",
     id: "good-will-hunting",
     title: "Good Will Hunting",
     year: 1997,
@@ -577,10 +571,10 @@ const MOVIES = [
     rating: 8.3,
     duration: 126,
     tagline: "Some people can never believe in themselves, until someone believes in them.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d7053228cc63.jpg",
     posterGradient: ["#1e3a8a", "#0c0a09"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/36aa9f0e9762.jpg",
     id: "her",
     title: "Her",
     year: 2013,
@@ -592,10 +586,10 @@ const MOVIES = [
     rating: 8.0,
     duration: 126,
     tagline: "A Spike Jonze love story.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0e4abeb3ad97.jpg",
     posterGradient: ["#be123c", "#7c2d12"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/15b499e948f6.jpeg",
     id: "the-departed",
     title: "The Departed",
     year: 2006,
@@ -607,10 +601,10 @@ const MOVIES = [
     rating: 8.5,
     duration: 151,
     tagline: "Cops or criminals. When you're facing a loaded gun, what's the difference?",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fcc484a85a3f.jpg",
     posterGradient: ["#7f1d1d", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e26d2a092723.jpg",
     id: "the-wolf-of-wall-street",
     title: "The Wolf of Wall Street",
     year: 2013,
@@ -622,10 +616,10 @@ const MOVIES = [
     rating: 8.2,
     duration: 180,
     tagline: "Earn. Spend. Party. Repeat.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4144074f8cf5.png",
     posterGradient: ["#15803d", "#0c0a09"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0fe805d65987.jpg",
     id: "the-grand-budapest-hotel",
     title: "The Grand Budapest Hotel",
     year: 2014,
@@ -637,10 +631,10 @@ const MOVIES = [
     rating: 8.1,
     duration: 99,
     tagline: "A perfect holiday from reality.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2bd0b2371813.jpg",
     posterGradient: ["#be123c", "#1d4ed8"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cb646fffdb77.jpg",
     id: "knives-out",
     title: "Knives Out",
     year: 2019,
@@ -652,10 +646,10 @@ const MOVIES = [
     rating: 7.9,
     duration: 130,
     tagline: "Hell, you can't have a murder mystery without a detective.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e4b28eab974b.jpg",
     posterGradient: ["#7c2d12", "#1e3a8a"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ab314eb4caf9.jpeg",
     id: "get-out",
     title: "Get Out",
     year: 2017,
@@ -667,10 +661,10 @@ const MOVIES = [
     rating: 7.7,
     duration: 104,
     tagline: "Just because you're invited, doesn't mean you're welcome.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d656290f2863.jpg",
     posterGradient: ["#7f1d1d", "#0a0a0a"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/619685481b39.jpg",
     id: "everything-everywhere",
     title: "Everything Everywhere All at Once",
     year: 2022,
@@ -682,10 +676,10 @@ const MOVIES = [
     rating: 7.8,
     duration: 139,
     tagline: "The universe is so much bigger than you realize.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/903fa7aff43d.jpg",
     posterGradient: ["#9333ea", "#1d4ed8"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7c05849a68ce.jpg",
     id: "the-shining",
     title: "The Shining",
     year: 1980,
@@ -697,10 +691,10 @@ const MOVIES = [
     rating: 8.4,
     duration: 146,
     tagline: "All work and no play makes Jack a dull boy.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/780e2f954862.jpg",
     posterGradient: ["#7f1d1d", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bb1c9d10e183.jpeg",
     id: "2001-space-odyssey",
     title: "2001: A Space Odyssey",
     year: 1968,
@@ -712,10 +706,10 @@ const MOVIES = [
     rating: 8.3,
     duration: 149,
     tagline: "The ultimate trip.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bb1c9d10e183.jpeg",
     posterGradient: ["#0c4a6e", "#0a0a0a"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a5609200151a.jpg",
     id: "a-clockwork-orange",
     title: "A Clockwork Orange",
     year: 1971,
@@ -727,10 +721,10 @@ const MOVIES = [
     rating: 8.0,
     duration: 137,
     tagline: "Being the adventures of a young man whose principal interests are ultra-violence and Beethoven.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0055b4c44324.jpg",
     posterGradient: ["#1d4ed8", "#0c0a09"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2907773df99c.jpg",
     id: "whip-of-time",
     title: "Whiplash of Time",
     year: 2019,
@@ -742,10 +736,10 @@ const MOVIES = [
     rating: 7.6,
     duration: 122,
     tagline: "Time bends. Justice doesn't.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2907773df99c.jpg",
     posterGradient: ["#0c4a6e", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ddf6db2e4147.jpg",
     id: "the-lighthouse",
     title: "The Lighthouse",
     year: 2019,
@@ -757,10 +751,10 @@ const MOVIES = [
     rating: 7.4,
     duration: 109,
     tagline: "There is no light at the end of the tunnel.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/875127f72d52.jpg",
     posterGradient: ["#3f3f46", "#09090b"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/785e882d214d.jpg",
     id: "the-revenant",
     title: "The Revenant",
     year: 2015,
@@ -772,10 +766,10 @@ const MOVIES = [
     rating: 8.0,
     duration: 156,
     tagline: "As long as you can still grab a breath, you fight.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7de02819355f.jpg",
     posterGradient: ["#78350f", "#1c1917"],
   },
   {
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1a58a5f7af71.jpg",
     id: "moonrise-kingdom",
     title: "Moonrise Kingdom",
     year: 2012,
@@ -787,12 +781,11 @@ const MOVIES = [
     rating: 7.8,
     duration: 94,
     tagline: "An exceptional new film by Wes Anderson.",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/927373d1e4af.jpg",
     posterGradient: ["#ca8a04", "#15803d"],
   },
 ];
 
-function getMovieById(id) {
+export function getMovieById(id) {
   return MOVIES.find((m) => m.id === id);
 }
-
-export { ALL_GENRES, ALL_MOODS, MOVIES, getMovieById };
