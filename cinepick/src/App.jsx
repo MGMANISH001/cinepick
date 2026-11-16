@@ -1,5 +1,3 @@
-// (Vite ESM port — imports injected by scripts/port_to_vite.py)
-
 import { useState, useRef, useMemo } from "react";
 import { ContentRow } from "./components/ContentRow";
 import { GenreFilter } from "./components/GenreFilter";
@@ -9,8 +7,8 @@ import { MoodQuiz } from "./components/MoodQuiz";
 import { MovieCard } from "./components/MovieCard";
 import { MovieModal } from "./components/MovieModal";
 import { ProfileGate } from "./components/ProfileGate";
-import { Sidebar } from "./components/Sidebar";
 import { SearchPanel } from "./components/SearchPanel";
+import { Sidebar } from "./components/Sidebar";
 import { TopTenRow } from "./components/TopTenRow";
 import { MOVIES, getMovieById } from "./data/movies";
 import { useStaggerEntrance } from "./hooks/useStaggerEntrance";
@@ -19,7 +17,6 @@ import { useProfile, useWatchlist } from "./store/store";
 
 // ============================================================
 // CINEPICK — main application (page composition + bootstrap)
-// Port of the original src/app/page.tsx, plus the React 18 mount.
 // ============================================================
 
 const BROWSE_PREVIEW_COUNT = 10;
@@ -82,6 +79,7 @@ function App() {
     [watchlist.likedIds]
   );
 
+  // Genre rows — includes "Animation" so the Anime sidebar item has a target.
   const genreRows = useMemo(() => {
     return ["Sci-Fi", "Drama", "Thriller", "Action", "Crime", "Adventure", "Animation"].map((g) => ({
       genre: g,
@@ -149,21 +147,20 @@ function App() {
     <div className="min-h-[100dvh] bg-black text-white">
       {/* === SIDEBAR === */}
       <Sidebar
-          onJumpHome={jumpToHome}
-          onJumpTrending={jumpToTrending}
-          onJumpTop10={jumpToTop10}
-          onJumpQuiz={jumpToQuiz}
-          onJumpBrowse={jumpToBrowse}
-          onJumpWatchlist={jumpToWatchlist}
-          onJumpGenreRow={jumpToGenreRow}
-          onOpenSearch={() => setSearchOpen(true)}
-          onCloseSearch={() => setSearchOpen(false)}    // ← ADD THIS
-          onOpenProfileGate={() => setProfileGateOpen(true)}
-          hasWatchlist={watchlistMovies.length > 0}
+        onJumpHome={jumpToHome}
+        onJumpTrending={jumpToTrending}
+        onJumpTop10={jumpToTop10}
+        onJumpQuiz={jumpToQuiz}
+        onJumpBrowse={jumpToBrowse}
+        onJumpWatchlist={jumpToWatchlist}
+        onJumpGenreRow={jumpToGenreRow}
+        onOpenSearch={() => setSearchOpen(true)}
+        onCloseSearch={() => setSearchOpen(false)}
+        onOpenProfileGate={() => setProfileGateOpen(true)}
+        hasWatchlist={watchlistMovies.length > 0}
       />
 
-      {/* === MAIN CONTENT (padded to clear the COLLAPSED rail on md+ —
-           the expanded sidebar panel overlays this padding when hovered) === */}
+      {/* === MAIN CONTENT === */}
       <div className="md:pl-20">
         {/* === HERO CAROUSEL === */}
         <HeroCarousel
@@ -267,7 +264,7 @@ function App() {
             </ContentRow>
           )}
 
-          {/* === GENRE ROWS === */}
+          {/* === GENRE ROWS (includes Animation for the Anime nav item) === */}
           {genreRows.map(({ genre, movies }) => (
             <div
               key={genre}
@@ -408,21 +405,21 @@ function App() {
 
       {/* === MODAL === */}
       <MovieModal
-          movie={openMovie}
-          liked={openMovie ? watchlist.isLiked(openMovie.id) : false}
-          onToggleLike={watchlist.toggle}
-          similar={similarForOpen}
-          onSelectSimilar={(m) => setOpenMovie(m)}
-          onOpenChange={(open) => !open && setOpenMovie(null)}
+        movie={openMovie}
+        liked={openMovie ? watchlist.isLiked(openMovie.id) : false}
+        onToggleLike={watchlist.toggle}
+        similar={similarForOpen}
+        onSelectSimilar={(m) => setOpenMovie(m)}
+        onOpenChange={(open) => !open && setOpenMovie(null)}
       />
 
-      {/* SEARCH PANEL */}
+      {/* === SEARCH PANEL === */}
       <SearchPanel
-          open={searchOpen}
-          onClose={() => setSearchOpen(false)}
-          onPickMovie={(m) => setOpenMovie(m)}
-          liked={watchlist.isLiked}
-          onToggleLike={watchlist.toggle}
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onPickMovie={(m) => setOpenMovie(m)}
+        liked={watchlist.isLiked}
+        onToggleLike={watchlist.toggle}
       />
     </div>
   );

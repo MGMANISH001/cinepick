@@ -1,5 +1,3 @@
-// (Vite ESM port — imports injected by scripts/port_to_vite.py)
-
 import { useState, useEffect, useRef } from "react";
 import { Icon } from "./Icon";
 import { ProfileBadge } from "./ProfileBadge";
@@ -13,13 +11,13 @@ import anime from "animejs";
 // w-20) so the content gets maximum room. Hovering the rail makes
 // it glide open to w-64 and the labels fade/slide in; moving the
 // mouse away glides it closed again. The expanded panel OVERLAYS
-// the content (the page never reflows) — exactly like the video
-// reference. On mobile it remains a slide-in drawer.
+// the content (the page never reflows). On mobile it's a drawer.
+//
+// Search is now a nav ITEM (not an inline input). Clicking it opens
+// a full-screen SearchPanel (rendered by App.jsx).
 // ============================================================
 
 // Label wrapper that collapses to zero width and fades out.
-// max-width is interpolable, so the reveal animates smoothly
-// without clipping the search suggestions dropdown.
 function Reveal({ expanded, children, className = "" }) {
   return (
     <span
@@ -35,16 +33,17 @@ function Reveal({ expanded, children, className = "" }) {
 }
 
 function Sidebar({
-                   onJumpHome,
-                   onJumpTrending,
-                   onJumpQuiz,
-                   onJumpBrowse,
-                   onJumpWatchlist,
-                   onOpenSearch,
-                   onCloseSearch,
-                   onOpenProfileGate,
-                   hasWatchlist,
-                 }) {
+  onJumpHome,
+  onJumpTrending,
+  onJumpQuiz,
+  onJumpBrowse,
+  onJumpWatchlist,
+  onJumpGenreRow,
+  onOpenSearch,
+  onCloseSearch,
+  onOpenProfileGate,
+  hasWatchlist,
+}) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hoverExpanded, setHoverExpanded] = useState(false);
   const navRef = useRef(null);
@@ -54,10 +53,10 @@ function Sidebar({
     { id: "search", label: "Search", icon: "Search", onSelect: onOpenSearch },
     { id: "movies", label: "Movies", icon: "Film", onSelect: onJumpBrowse },
     { id: "entertainment", label: "Entertainment", icon: "Flame", onSelect: onJumpTrending },
-    { id: "anime", label: "Anime", icon: "Sparkles", onSelect: onJumpQuiz },
+    { id: "anime", label: "Anime", icon: "Sparkles", onSelect: () => onJumpGenreRow("Animation") },
     ...(hasWatchlist
-        ? [{ id: "mylist", label: "My List", icon: "Bookmark", onSelect: onJumpWatchlist }]
-        : []),
+      ? [{ id: "mylist", label: "My List", icon: "Bookmark", onSelect: onJumpWatchlist }]
+      : []),
   ];
 
   // Staggered fade-in for sidebar nav items (re-runs when My List appears).
@@ -76,7 +75,7 @@ function Sidebar({
     });
   }, [hasWatchlist]);
 
-  // Stagger the logo + search block on mount too.
+  // Stagger the logo block on mount.
   useEffect(() => {
     const node = navRef.current;
     if (!node) return;
@@ -107,13 +106,11 @@ function Sidebar({
     };
   }, [mobileOpen]);
 
-
   function handleNavSelect(item) {
     item.onSelect();
     setMobileOpen(false);
-    onCloseSearch?.();      // ← ADD THIS — closes the search panel
+    onCloseSearch?.(); // close the search panel if it's open
   }
-
 
   // The rail is rendered twice (desktop fixed + mobile drawer) with an
   // `expanded` flag driving every reveal/width class.
@@ -129,7 +126,7 @@ function Sidebar({
         aria-expanded={expanded}
       >
         {/* Logo */}
-        <div data-sidebar-block="" className="flex items-center px-4 py-5">
+        <div data-sidebar-block className="flex items-center px-4 py-5">
           <span className="grid w-12 shrink-0 place-items-center">
             <span className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-rose-500 to-fuchsia-500 shadow-lg shadow-rose-500/30">
               <Icon name="Film" className="h-5 w-5 text-white" />
@@ -139,7 +136,6 @@ function Sidebar({
             <span className="pl-1 text-lg font-black tracking-tight text-white">CINEPICK</span>
           </Reveal>
         </div>
-
 
         {/* Nav items (scrollable) */}
         <nav className="flex-1 overflow-y-auto px-4 pb-4">
@@ -151,7 +147,7 @@ function Sidebar({
           {items.map((item) => (
             <button
               key={item.id}
-              data-nav-item=""
+              data-nav-item
               onClick={() => handleNavSelect(item)}
               className={cn(
                 "group flex w-full items-center rounded-lg py-3 text-left text-sm font-medium md:py-2.5 text-zinc-300 transition-all hover:bg-white/5 hover:text-white",
@@ -190,7 +186,7 @@ function Sidebar({
                 Take the Mood Quiz to get films matched to how you feel.
               </p>
               <button
-                onClick={onJumpQuiz}
+                onClick={() => handleNavSelect({ onSelect: onJumpQuiz })}
                 className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-rose-500 to-fuchsia-500 px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg shadow-rose-500/30"
               >
                 <Icon name="Sparkles" className="h-3 w-3" /> Start Quiz
@@ -214,11 +210,7 @@ function Sidebar({
         <div
           className="fixed inset-y-0 left-0 z-40"
           onMouseEnter={() => setHoverExpanded(true)}
-          onMouseLeave={() => {
-            setHoverExpanded(false);
-            setSearchOpen(false);
-            setSearchQuery("");
-          }}
+          onMouseLeave={() => setHoverExpanded(false)}
         >
           {renderRail({ expanded: hoverExpanded })}
         </div>

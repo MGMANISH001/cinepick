@@ -54,9 +54,9 @@ function SearchPanel({ open, onClose, onPickMovie, liked, onToggleLike }) {
   }
 
   return (
-      <div className="fixed inset-0 z-50 overflow-y-auto bg-black md:left-64">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black md:left-64">
       {/* Sticky search header */}
-      <div className="sticky top-0 z-10 border-b border-white/10 bg-black/95 backdrop-blur-xl">
+      <div className="sticky top-0 z-10 border-b border-white/10 bg-black">
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-4 sm:px-6">
           <Icon name="Search" className="h-5 w-5 shrink-0 text-zinc-500" />
           <input
