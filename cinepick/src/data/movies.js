@@ -106,7 +106,7 @@ export const MOVIES = [
     rating: 8.7,
     duration: 136,
     tagline: "Welcome to the real world.",
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cdcab656ddf1.jpg",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/06a4da46abaf.jpg",
     posterGradient: ["#166534", "#0a0a0a"],
   },
   {
@@ -136,8 +136,8 @@ export const MOVIES = [
     rating: 8.8,
     duration: 142,
     tagline: "Life is like a box of chocolates.",
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4d245c4f792f.jpg",
-    posterGradient: ["#15803d", "#3f6212"],
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f0737ab8c19f.jpg",
+    posterGradient: ["#1e40af", "#0f172a"],
   },
   {
     id: "shawshank",
@@ -361,7 +361,7 @@ export const MOVIES = [
     rating: 8.5,
     duration: 166,
     tagline: "Long live the fighters.",
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a587e54a0b6b.jpg",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/dac71418f781.jpg",
     posterGradient: ["#a16207", "#1c1917"],
   },
   {
@@ -496,7 +496,7 @@ export const MOVIES = [
     rating: 7.8,
     duration: 120,
     tagline: "You don't get to 500 million friends without making a few enemies.",
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f5d63f843631.jpg",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7a52f927256d.jpeg",
     posterGradient: ["#1e3a8a", "#0c0a09"],
   },
   {
@@ -601,7 +601,7 @@ export const MOVIES = [
     rating: 8.5,
     duration: 151,
     tagline: "Cops or criminals. When you're facing a loaded gun, what's the difference?",
-    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fcc484a85a3f.jpg",
+    posterUrl: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3742c26c9826.jpeg",
     posterGradient: ["#7f1d1d", "#1c1917"],
   },
   {

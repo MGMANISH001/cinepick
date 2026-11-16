@@ -9,7 +9,7 @@ import anime from "animejs";
 
 // ============================================================
 // CINEPICK — auto-rotating hero carousel (Hotstar-style)
-// 7 featured films, advances every 4s, pauses on hover/focus,
+// 7 featured films, advances every 4s, pauses only on touch/focus,
 // Ken Burns slow-zoom backdrop, staggered block entrances.
 // ============================================================
 
@@ -110,8 +110,6 @@ function HeroCarousel({ slides, onPlay, onMoreInfo, onJumpToQuiz }) {
     <header
       ref={rootRef}
       className="relative isolate overflow-hidden bg-black text-white"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
       onTouchStart={onTouchStart}

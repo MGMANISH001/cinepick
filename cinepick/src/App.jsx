@@ -395,9 +395,9 @@ function App() {
               <span className="text-zinc-600">— a taste-tuned film discovery experience</span>
             </div>
             <p className="max-w-md text-xs sm:max-w-sm sm:text-right">
-              Built with plain HTML, Tailwind CSS, React, and anime.js — no build
-              step. Profile, watchlist, and recommendations are stored locally in
-              your browser only.
+              Built with React, Tailwind CSS, and anime.js — powered by Vite.
+              Profile, watchlist, and recommendations are stored locally in your
+              browser only.
             </p>
           </div>
         </footer>
