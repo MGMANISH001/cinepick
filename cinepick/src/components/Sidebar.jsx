@@ -109,7 +109,12 @@ function Sidebar({
   function handleNavSelect(item) {
     item.onSelect();
     setMobileOpen(false);
-    onCloseSearch?.(); // close the search panel if it's open
+    // Only close the search panel when navigating AWAY from search.
+    // (Don't close it when the Search button itself is clicked — that
+    // would immediately undo the onOpenSearch call above.)
+    if (item.id !== "search") {
+      onCloseSearch?.();
+    }
   }
 
   // The rail is rendered twice (desktop fixed + mobile drawer) with an
@@ -119,14 +124,14 @@ function Sidebar({
       <aside
         ref={navRef}
         className={cn(
-          "flex h-full flex-col border-r border-white/10 bg-zinc-950/95 backdrop-blur-xl transition-[width] duration-300 ease-out",
-          expanded ? "w-64 max-w-[85vw] shadow-2xl shadow-black/60" : "w-20"
+            "flex h-full flex-col border-r border-white/10 bg-zinc-950 transition-[width] duration-300 ease-out",
+            expanded ? "w-64 max-w-[85vw] shadow-2xl shadow-black/60 backdrop-blur-xl" : "w-20"
         )}
         aria-label="Main navigation"
         aria-expanded={expanded}
       >
         {/* Logo */}
-        <div data-sidebar-block className="flex items-center px-4 py-5">
+        <div data-sidebar-block="" className="flex items-center px-4 py-5">
           <span className="grid w-12 shrink-0 place-items-center">
             <span className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-rose-500 to-fuchsia-500 shadow-lg shadow-rose-500/30">
               <Icon name="Film" className="h-5 w-5 text-white" />
@@ -147,7 +152,7 @@ function Sidebar({
           {items.map((item) => (
             <button
               key={item.id}
-              data-nav-item
+              data-nav-item=""
               onClick={() => handleNavSelect(item)}
               className={cn(
                 "group flex w-full items-center rounded-lg py-3 text-left text-sm font-medium md:py-2.5 text-zinc-300 transition-all hover:bg-white/5 hover:text-white",
@@ -208,7 +213,7 @@ function Sidebar({
       {/* Desktop: fixed left rail — collapses to icons, expands on hover */}
       <div className="hidden md:block">
         <div
-          className="fixed inset-y-0 left-0 z-40"
+          className="fixed inset-y-0 left-0 z-[60]"
           onMouseEnter={() => setHoverExpanded(true)}
           onMouseLeave={() => setHoverExpanded(false)}
         >
@@ -220,7 +225,7 @@ function Sidebar({
       <button
         onClick={() => setMobileOpen(true)}
         aria-label="Open menu"
-        className="fixed left-3 top-3 z-40 grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-zinc-950/80 text-white shadow-lg shadow-black/40 backdrop-blur md:hidden"
+        className="fixed left-3 top-3 z-[60] grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-zinc-950/80 text-white shadow-lg shadow-black/40 backdrop-blur md:hidden"
         style={{
           marginTop: "env(safe-area-inset-top)",
           marginLeft: "env(safe-area-inset-left)",
@@ -231,7 +236,7 @@ function Sidebar({
 
       {/* Mobile drawer overlay */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
+        <div className="fixed inset-0 z-[60] md:hidden">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
